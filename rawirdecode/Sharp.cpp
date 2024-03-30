@@ -14,6 +14,9 @@ bool decodeSharp(byte *bytes, int byteCount)
       case 0x31:
         Serial.println(F("POWER ON"));
         break;
+      case 0x81:
+        Serial.println(F("Timer POWER OFF"));
+        break;
     }
 
     // Operating mode
@@ -31,6 +34,9 @@ bool decodeSharp(byte *bytes, int byteCount)
       case 0x03:
         Serial.println(F("MODE DRY"));
         break;
+      case 0x04:
+        Serial.println(F("MODE ION"));
+        break;      
     }
 
     // Temperature
@@ -40,7 +46,8 @@ bool decodeSharp(byte *bytes, int byteCount)
     } else {
       Serial.println(bytes[4] + 17);
     }
-
+    
+    // Fan
     switch (bytes[6] & 0xF0) {
       case 0x20:
         Serial.println(F("FAN: AUTO"));
@@ -54,7 +61,31 @@ bool decodeSharp(byte *bytes, int byteCount)
       case 0x70:
         Serial.println(F("FAN: 3"));
         break;
+      case 0x60:
+        Serial.println(F("FAN: 4"));
+        break;      
     }
+    // Flap position
+    switch (bytes[8] & 0x0F) {
+      case 0x08:
+        Serial.println(F("FLAP: AUTO"));
+        break;
+      case 0x09:
+        Serial.println(F("FLAP: TOP"));
+        break;
+      case 0x0A:
+        Serial.println(F("FLAP: TOP-MIDDLE"));
+        break;
+      case 0x0B:
+        Serial.println(F("FLAP: MIDDLE"));
+        break;
+      case 0x0C:
+        Serial.println(F("FLAP: MIDDLE-DOWN"));
+        break;
+      case 0x0F:
+        Serial.println(F("FLAP: DOWN"));
+        break;       
+    }    
 
     // Check if the checksum matches
     byte checksum = 0x00;
